@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Github user explorer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax("https://api.github.com/users/torvalds/repos", {
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#mainUL').append("<li class='list-group-item'><a href ='" + data[index].html_url + "'>" +
+                            data[index].description + "</a></li>");
+                    });
+                },
+                error: function (request, status, error) {
+                    window.location.href = "404-error-page.html";
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Linus Torvalds repositories</h1>
+            <p>Step 1. Data from Linus Torvalds repository</p>
+        </div>
+        <ul id="mainUL" class="list-group">
+        </ul>
+    </div>
+</body> 
+</html>

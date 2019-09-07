@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Github user explorer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        function fillData(searchInput) { 
+            $('#mainUL').html("");
+            if(!searchInput) 
+                searchInput = "torvalds"
+            $.ajax("https://api.github.com/users/"+ searchInput +"/repos", {
+                success: function (data) {
+                    $.each(data, function (index, value) { 
+                            $('#mainUL').append(
+                                "<li class='list-group-item'>" +
+                                data[index].name +
+                                " :- <a href ='" + data[index].html_url + "'>" +
+                                data[index].description +
+                                "</a></li>"); 
+                    });
+                },
+                error: function (request, status, error) {
+                    window.location.href = "404-error-page.html";
+                }
+            });
+        }
+
+        $(document).ready(function () {  
+            var timer;
+            $('#usernameInput').bind('input', function () {
+                window.clearTimeout(timer);
+                timer = window.setTimeout(function () {
+                    fillData($('#usernameInput').val());
+                }, 1000);
+            })
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron"> 
+                <div class="jumbotron"> 
+            <h1>Repositories</h1>
+            <p>Step 3. Data from repository</p>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" id="usernameInput" class="form-control"
+             placeholder="Search by Username" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        <div>
+            <ul id="mainUL" class="list-group">
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
